@@ -1,0 +1,147 @@
+#include "stdafx.h"
+#include <iostream>
+#include <windows.h>
+#include <cmath>
+#include <list>
+#include <string>
+#include <fstream>
+using namespace std;
+
+class Queue {
+	int s = 100;
+	int *queue;
+	int pered, zad;
+	list< string >  stack;
+public:
+	Queue();
+	void push(string k);
+	void push2(int k);
+	void fout();
+	friend void out(Queue q);
+	int size();
+	void pop();
+	void pop2();
+	int front();
+	string back();
+};
+
+Queue::Queue()
+{
+	char *as = new char[s];
+	queue;
+	pered = 0;
+	zad = 0;
+	delete[] as;
+}
+
+void out(Queue q) {
+	for (int i = q.pered + 1; i<q.zad + 1; i++)
+	{
+		cout << " " << q.queue[i];
+	}
+
+}
+
+void Queue::push(string k)
+{
+	stack.push_back(k);
+	if (zad + 1 == pered || (zad + 1 == s && !pered)) {
+		cout << "дек пуст\n";
+		return;
+	}
+	if (zad == s) zad = 0;
+}
+void Queue::push2(int k)
+{
+
+	if (zad + 1 == pered || (zad + 1 == s && !pered)) {
+		cout << "дек пуст\n";
+		return;
+	}
+	if (zad == s) zad = 0;
+	for (int i = zad; i > 0; i--)
+	{
+		queue[i] = queue[i];
+	}
+
+
+}
+
+void Queue::pop()
+{
+	if (pered == zad) {
+		cout << "дек пуст\n";
+		return;
+	}
+	zad--;
+	for (int i = 1; i <= zad + 1; i++)
+	{
+		queue[i] = queue[i + 1];
+	}
+	if (pered == s) pered = 0;
+
+}
+void Queue::pop2()
+{
+	stack.pop_back();
+}
+void Queue::fout()
+{
+	ofstream fout("D:\\lab\\2.txt");
+	fout << *stack.rbegin();
+	fout.close();
+	zad = 0;
+	pered = 0;
+
+}
+int Queue::size()
+{
+	int s = 0;
+	for (int i = pered; i<zad; i++)
+	{
+		s++;
+	}
+
+	return s;
+}
+
+string Queue::back()
+{
+	string a = stack.back();
+	return a;
+}
+
+int Queue::front()
+{
+	return queue[pered + 1];
+}
+
+
+int main()
+{
+	setlocale(LC_ALL, "rus");
+	Queue queue1;
+	string str;
+	ifstream inFile;
+	inFile.open("D:\\lab\\1.txt");
+	while (!inFile.eof())
+	{
+		while (inFile >> str) {
+			if (str == "+" || str == "-" || str == "*" || str == "/") {
+				string b = queue1.back(); queue1.pop2();
+				string a = queue1.back(); queue1.pop2();
+				queue1.push(string("(") + a + str + b + ")");
+			}
+			else {
+				queue1.push(str);
+			}
+
+		}
+	}
+	inFile.close();
+	ofstream fout("D:\\lab\\2.txt");
+	queue1.fout();
+	fout.close();
+	system("pause");
+	return 0;
+}
